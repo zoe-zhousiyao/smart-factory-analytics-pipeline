@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Factory Analytics Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Smart Factory Analytics Dashboard</h1>
+
+        <section>
+            <h2>Key Metrics</h2>
+            <div class="cards">
+                <div class="card">
+                    <h3>Total Output</h3>
+                    <p>{{ kpis.total_output }}</p>
+                </div>
+                <div class="card">
+                    <h3>Total Defects</h3>
+                    <p>{{ kpis.total_defects }}</p>
+                </div>
+                <div class="card">
+                    <h3>Defect Rate</h3>
+                    <p>{{ kpis.defect_rate }}%</p>
+                </div>
+                <div class="card">
+                    <h3>Avg Temperature</h3>
+                    <p>{{ kpis.avg_temperature }}°C</p>
+                </div>
+                <div class="card">
+                    <h3>Total Downtime</h3>
+                    <p>{{ kpis.total_downtime }} min</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Machine Summary</h2>
+            <table>
+                <tr>
+                    <th>Machine</th>
+                    <th>Output</th>
+                    <th>Defects</th>
+                    <th>Defect Rate (%)</th>
+                    <th>Avg Temp</th>
+                    <th>Downtime</th>
+                </tr>
+                {% for row in summary %}
+                <tr>
+                    <td>{{ row.machine_id }}</td>
+                    <td>{{ row.output_units }}</td>
+                    <td>{{ row.defect_units }}</td>
+                    <td>{{ row.defect_rate }}</td>
+                    <td>{{ row.temperature }}</td>
+                    <td>{{ row.downtime_min }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </section>
+
+        <section>
+            <h2>Anomaly Records</h2>
+            <table>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Machine</th>
+                    <th>Output</th>
+                    <th>Defects</th>
+                    <th>Temperature</th>
+                    <th>Downtime</th>
+                </tr>
+                {% for row in anomalies %}
+                <tr>
+                    <td>{{ row.timestamp }}</td>
+                    <td>{{ row.machine_id }}</td>
+                    <td>{{ row.output_units }}</td>
+                    <td>{{ row.defect_units }}</td>
+                    <td>{{ row.temperature }}</td>
+                    <td>{{ row.downtime_min }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </section>
+
+        <section>
+            <h2>Recent Records</h2>
+            <table>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Machine</th>
+                    <th>Output</th>
+                    <th>Defects</th>
+                    <th>Temperature</th>
+                    <th>Energy</th>
+                    <th>Downtime</th>
+                </tr>
+                {% for row in recent_data %}
+                <tr>
+                    <td>{{ row.timestamp }}</td>
+                    <td>{{ row.machine_id }}</td>
+                    <td>{{ row.output_units }}</td>
+                    <td>{{ row.defect_units }}</td>
+                    <td>{{ row.temperature }}</td>
+                    <td>{{ row.energy_kwh }}</td>
+                    <td>{{ row.downtime_min }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </section>
+    </div>
+</body>
+
+</html>
