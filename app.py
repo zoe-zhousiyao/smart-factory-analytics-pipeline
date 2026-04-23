@@ -1,23 +1,34 @@
+import json
+import os
 from flask import Flask, render_template
-from utils.analytics import load_data, calculate_kpis, detect_anomalies, machine_summary
 
 app = Flask(__name__)
 
 
+def load_processed_result(json_path: str = "data/result.json") -> dict:
+    """
+    Load precomputed analytics result from a JSON file.
+    """
+    if not os.path.exists(json_path):
+        raise FileNotFoundError(
+            f"Processed result file not found: {json_path}. "
+            "Please run lambda_function.py first to generate data/result.json."
+        )
+
+    with open(json_path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
 @app.route("/")
 def dashboard():
-    df = load_data("data/production_data.csv")
-
-    kpis = calculate_kpis(df)
-    anomalies = detect_anomalies(df)
-    summary = machine_summary(df)
+    result = load_processed_result("data/result.json")
 
     return render_template(
         "index.html",
-        kpis=kpis,
-        anomalies=anomalies.to_dict(orient="records"),
-        summary=summary.to_dict(orient="records"),
-        recent_data=df.tail(5).to_dict(orient="records")
+        kpis=result["kpis"],
+        anomalies=result["anomalies"],
+        summary=result["summary"],
+        recent_data=result["recent_data"],
     )
 
 
